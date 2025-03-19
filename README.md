@@ -1,268 +1,37 @@
-# ValenBiciJDG
+# Introducción
 
-Tarea 1-Crear un proyecto Java llamado ValenbiciAPI  
+El proyecto se centra en desarrollar una aplicación web que permita a los usuarios visualizar en un mapa las estaciones de Valenbisi, mostrando información relevante como la dirección, el número de bicicletas disponibles, libres y el total de anclajes y las coordenadas de localización. Para lograr esto, se utilizan las siguientes tecnologías:
 
-Para empezar a manejar APIs en Java, vamos a crear un primer proyecto de prueba. En este primer momento, es fundamental que entendáis bien el código. Esta parte consiste en probar el siguiente código, entenderlo y completarlo.  
- 
+- **API de Valenbisi**: Se utiliza para obtener los datos de las estaciones, incluyendo su ubicación geográfica y la información de disponibilidad en tiempo real.  
 
-Crea un proyecto de java en NetBeans llamado ValenbiciApi.java con una plantilla de Maven  
+- **Leaflet**: Una librería de JavaScript para mapas interactivos que permite mostrar el mapa base y añadir marcadores para representar las estaciones.  
 
-Copia el código que te proporcionamos.  
+- **PHP**: Se utiliza para realizar la petición a la API de Valenbisi, procesar la respuesta JSON y generar dinámicamente el código JavaScript necesario para crear los marcadores en el mapa.  
 
-Completa el código para que muestre la estación, las bicicletas disponibles y espacios disponibles.  
+- **HTML, CSS y JavaScript**: Se utilizan para la estructura, el estilo y la interactividad de la página web.  
 
-  
+- **Docker**: Docker es una plataforma que permite empaquetar aplicaciones y sus dependencias en "contenedores". Un contenedor es un entorno aislado que contiene todo lo necesario para que una aplicación se ejecute: código, bibliotecas, configuraciones, etc.  
 
-//valenbiciAPIv1.java  
+- **Migración a AWS**: Migrar el proyecto a AWS proporciona escalabilidad, disponibilidad, rendimiento y seguridad mejorados. La transformación a AWS representa una mejora significativa en la calidad y la robustez del proyecto.  
 
+Para más información podéis consultar la web de datos abiertos del Ayuntamiento de Valencia: [https://valencia.opendatasoft.com/pages/home/](https://valencia.opendatasoft.com/pages/home/)  
 
-package es.gva.edu.iesjuandegaray.bicis;  
+Este proyecto es totalmente guiado mediante los documentos que se irán publicando durante este trimestre y por quincenas.  
 
-import org.apache.http.HttpEntity;  
+La asistencia a tutorías colectivas que se realizan una hora a la semana en el centro es recomendable.  
 
-  
+[https://valencia.opendatasoft.com/pages/home/](https://valencia.opendatasoft.com/pages/home/)
 
-import org.apache.http.HttpResponse;  
 
-import org.apache.http.client.methods.HttpGet;  
+# Instrucciones
 
-import org.apache.http.impl.client.CloseableHttpClient;  
+El proyecto **Valenbiciv1** es un trabajo individual que deberá estar en un repositorio de **Github personal**. Todo entorno (IDE) que tenga posibilidad de sincronización con Github debe hacerlo (NetBeans, Eclipse, etc.).
 
-import org.apache.http.impl.client.HttpClients;  
+Debéis hacer una entrega de cada una de las tareas, ya que se evaluarán por separado en **Aules** en el módulo de **Proyecto Intermodular**, justificando con capturas de pantalla vuestro trabajo. Luego lo utilizaréis para la **memoria final**.
 
-import org.apache.http.util.EntityUtils;  
+Como entrega final, debéis presentar una **memoria final** que se realizará bajo las pautas marcadas en el documento de instrucciones de memoria final.
 
-import org.json.JSONArray;  
+La exposición de los proyectos se realizará según el calendario previsto y seréis convocados con antelación.
 
-import org.json.JSONObject;  
-
-  
-
-import java.io.IOException;  
-
-  
-
-public class ValenbiciAPI {  
-
-    private static final String API_URL = "https://valencia.opendatasoft.com/api/explore/v2.1/catalog/datasets/valenbisi-disponibilitat-valenbisi-dsiponibilidad/records?limit=20";  
-
-  
-
-    public static void main(String[] args) {  
-
-        if (API_URL.isEmpty()) {  
-
-            System.err.println("La URL de la API no está especificada.");  
-
-            return;  
-
-        }  
-
-  
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {  
-
-            HttpGet request = new HttpGet(API_URL);  
-
-            HttpResponse response = httpClient.execute(request);  
-
-  
-
-            HttpEntity entity = response.getEntity();  
-
-            if (entity != null) {  
-
-                String result = EntityUtils.toString(entity);  
-
-                System.out.println("Respuesta de la API:");  
-
-                System.out.println(result);  
-
-  
-
-                // Intentamos procesar la respuesta como JSON  
-
-                try {  
-
-                    JSONObject jsonObject = new JSONObject(result);  
-
-                    JSONArray resultsArray = jsonObject.getJSONArray("results");  
-
-  
-
-                    // Recorre el vector resultsArray mostrando los datos solicitados.  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-                } catch (org.json.JSONException e) {  
-
-                    // Si la respuesta no es un array JSON, imprimimos el mensaje de error  
-
-                    System.err.println("Error al procesar los datos JSON: " + e.getMessage());  
-
-                }  
-
-            }  
-
-        } catch (IOException e) {  
-
-            e.printStackTrace();  
-
-        }  
-
-    }  
-
-}  
-
- 
-
-Tarea 2-Configurar el archivo pom.xml  
-
-  
-
-Ahora, como hemos utilizado una plantilla de Maven, deberás configurar el archivo pom.xml que se encuentra en los ficheros de tu proyecto Java en NetBeans.   
-
-  
-
-¿Cómo funciona Apache Maven?  
-
-  
-
-Maven usa un modelo de objetos de proyecto (POM) para administrar un proyecto.  
-
-  
-
-Los comandos de Maven ejecutan partes de su modelo de objetos de proyecto. Un modelo de objetos de proyecto se suele describir como un documento XML. Una descripción de POM NO se limita a XML.  
-
-  
-
-Se pueden utilizar otros formatos para describir el modelo de objetos del proyecto, sin embargo, XML fue el primer formato utilizado.  
-
-Diagrama
-
-El contenido generado por IA puede ser incorrecto.  
-
-Modelo de objeto del proyecto  
-
-The Project Object Model  
-
-The Project Object Model  
-
-  
-
-¿Qué es el archivo POM?  
-
-  
-
-Archivo XML que contiene información relevante del proyecto.  
-
-El POM Maven dice qué tipo de proyecto se está trabajando y cómo modificar el comportamiento por defecto para generar la salida.  
-
-  
-
-  
-
-  
- 
-
-Abrir el archivo pom.xml desde NetBeans situado aquí:  
-
-  
-
-Interfaz de usuario gráfica, Texto, Aplicación, Chat o mensaje de texto
-
-Descripción generada automáticamente  
-
-  
-
-Y copiar la siguiente configuración a pom.xml   
-
-  
-
-<?xml version="1.0" encoding="UTF-8"?>  
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">  
-
-    <modelVersion>4.0.0</modelVersion>  
-
-    <groupId>JDE</groupId>  
-
-    <artifactId>ValenbiciAPI</artifactId>  
-
-    <version>1.0-SNAPSHOT</version>  
-
-    <packaging>jar</packaging>  
-
-    <properties>  
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
-
-        <maven.compiler.release>23</maven.compiler.release>  
-
-        <exec.mainClass>jde.valenbiciapi.ValenbiciAPI</exec.mainClass>  
-
-    </properties>  
-
-    <dependencies>  
-
-        <dependency>  
-
-            <groupId>org.apache.httpcomponents</groupId>  
-
-            <artifactId>httpclient</artifactId>  
-
-            <version>4.5.13</version>  
-
-        </dependency>  
-
-        <dependency>  
-
-            <groupId>org.json</groupId>  
-
-            <artifactId>json</artifactId>  
-
-            <version>20210307</version>  
-
-        </dependency>  
-
-    </dependencies>  
-
-    <build>   
-
-        <plugins>   
-
-            <plugin>   
-
-                <groupId>org.codehaus.mojo</groupId>   
-
-                <artifactId>exec-maven-plugin</artifactId>   
-
-                <version>3.1.0</version>   
-
-                <configuration>   
-
-                    <mainClass>es.gva.edu.iesjuandegaray.bicis.ValenbiciAPI</mainClass>   
-
-                </configuration>   
-
-            </plugin>   
-
-        </plugins>   
-
-    </build>  
-
-</project>  
-
-  
-
-Revisa el código fijándote en las dependencias creadas,artefactos y plugins , ejecuta el programa Java y te darás cuenta de que se han recogido algunos datos provenientes de la API ValenBici .  
-
+Todos los archivos que se utilizarán en el proyecto estarán ubicados en un repositorio de **Github** llamado **ValenBiciJDG**.
  
